@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from sign.models import Event,Guest
 
 # Create your views here.
 def index(request):
@@ -40,5 +41,22 @@ def login_action(request):
 @login_required
 def event_manage(request):
 	#username = request.COOKIES.get('user','') #读取浏览器cookie
+	event_list = Event.objects.all()
 	username = request.session.get('user','')
-	return render(request, 'event_manage.html',{'user':username})
+	return render(request, 'event_manage.html',{'user':username,'events':event_list})
+
+#发布会名称凑数
+@login_required
+def search_name(request):
+	username = request.session.get('user','')
+	search_name = request.GET.get('name','')
+	event_list = Event.objects.filter(name__contains=search_name)
+	return render(request, 'event_manage.html',{'user':username,'events':event_list})
+
+# 嘉宾管理
+@login_required
+def guest_manage(request):
+	#username = request.COOKIES.get('user','') #读取浏览器cookie
+	guest_list = Guest.objects.all()
+	username = request.session.get('user','')
+	return render(request, 'guest_manage.html',{'user':username,'guests':guest_list})
