@@ -3,6 +3,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from sign.models import Event,Guest
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 # Create your views here.
 def index(request):
@@ -43,9 +44,17 @@ def event_manage(request):
 	#username = request.COOKIES.get('user','') #读取浏览器cookie
 	event_list = Event.objects.all()
 	username = request.session.get('user','')
-	return render(request, 'event_manage.html',{'user':username,'events':event_list})
+	paginator = Paginator(event_list, 2)
+	p = request.GET.get('page')
+	try:
+		events = paginator.page(p)
+	except PageNotAnInteger:
+		events = paginator.page(1)
+	except EmptyPage:
+		events = paginator.page(paginator.num_pages)
+	return render(request, 'event_manage.html',{'user':username,'events':events})
 
-#发布会名称凑数
+#发布会名称搜索
 @login_required
 def search_name(request):
 	username = request.session.get('user','')
@@ -59,4 +68,13 @@ def guest_manage(request):
 	#username = request.COOKIES.get('user','') #读取浏览器cookie
 	guest_list = Guest.objects.all()
 	username = request.session.get('user','')
-	return render(request, 'guest_manage.html',{'user':username,'guests':guest_list})
+	paginator = Paginator(guest_list, 2)
+	p = request.GET.get('page')
+	try:
+		contacts = paginator.page(p)
+	except PageNotAnInteger:
+		contacts = paginator.page(1)
+	except EmptyPage:
+		contacts = paginator.page(paginator.num_pages)
+
+	return render(request, 'guest_manage.html',{'user':username,'guests':contacts})
