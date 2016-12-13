@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
@@ -78,3 +78,30 @@ def guest_manage(request):
 		contacts = paginator.page(paginator.num_pages)
 
 	return render(request, 'guest_manage.html',{'user':username,'guests':contacts})
+
+#签到页面
+@login_required
+def sign_index(request,event_id):
+	event = get_object_or_404(Event,id=event_id)
+	return render(request, 'sign_index.html',{'event':event})
+
+#签到动作
+@login_required
+def sign_index_action(request,event_id):
+	event = get_object_or_404(Event,id=event_id)
+	phone = request.POST.get('phone','')
+
+	result = Guest.objects.filter(phone=phone)
+	if not result:
+		return render(request, 'sign_index.html',{'event':event,'hit':'phone error.'})
+
+	result = Guest.objects.filter(phone=phone,event_id=event_id)
+	if not result:
+		return render(request, 'sign_index.html',{'event':event,'hit':'event id or phone error.'})
+
+	result = Guest.objects.get(phone=phone)
+	if result.sign:
+		return render(request, 'sign_index.html',{'event':event,'hit':'user has signed in.'})
+	else:
+		Guest.objects.filter(phone=phone).update(sign='1')
+		return render(request, 'sign_index.html',{'event':event,"hit":"sign in SUCCESS!",'guest':result})
