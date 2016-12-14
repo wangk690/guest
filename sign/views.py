@@ -83,28 +83,34 @@ def guest_manage(request):
 @login_required
 def sign_index(request,event_id):
 	event = get_object_or_404(Event,id=event_id)
-	return render(request, 'sign_index.html',{'event':event})
+	total = Guest.objects.filter(event=event_id)
+	signed = Guest.objects.filter(event=event_id,sign='1')
+
+	return render(request, 'sign_index.html',{'event':event,'total':total.count(),'signed':signed.count()})
 
 #签到动作
 @login_required
 def sign_index_action(request,event_id):
 	event = get_object_or_404(Event,id=event_id)
 	phone = request.POST.get('phone','')
-
+	
+	total = Guest.objects.filter(event=event_id).count()
+	signed = Guest.objects.filter(event=event_id,sign='1').count()
 	result = Guest.objects.filter(phone=phone)
 	if not result:
-		return render(request, 'sign_index.html',{'event':event,'hit':'phone error.'})
+		return render(request, 'sign_index.html',{'event':event,'hit':'phone error.','total':total,'signed':signed})
 
 	result = Guest.objects.filter(phone=phone,event_id=event_id)
 	if not result:
-		return render(request, 'sign_index.html',{'event':event,'hit':'event id or phone error.'})
+		return render(request, 'sign_index.html',{'event':event,'hit':'event id or phone error.','total':total,'signed':signed})
 
 	result = Guest.objects.get(phone=phone)
 	if result.sign:
-		return render(request, 'sign_index.html',{'event':event,'hit':'user has signed in.'})
+		return render(request, 'sign_index.html',{'event':event,'hit':'user has signed in.','total':total,'signed':signed})
 	else:
 		Guest.objects.filter(phone=phone).update(sign='1')
-		return render(request, 'sign_index.html',{'event':event,"hit":"sign in SUCCESS!",'guest':result})
+		signed = Guest.objects.filter(event=event_id,sign='1').count()
+		return render(request, 'sign_index.html',{'event':event,"hit":"sign in SUCCESS!",'guest':result,'total':total,'signed':signed})
 
 #退出登录
 @login_required
