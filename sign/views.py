@@ -39,7 +39,7 @@ def login_action(request):
 			return render(request, 'index.html',{'errors':'username or password error!'})
 
 #发布会管理
-@login_required
+#@login_required
 def event_manage(request):
 	#username = request.COOKIES.get('user','') #读取浏览器cookie
 	event_list = Event.objects.all()
@@ -55,7 +55,7 @@ def event_manage(request):
 	return render(request, 'event_manage.html',{'user':username,'events':events})
 
 #发布会名称搜索
-@login_required
+#@login_required
 def search_name(request):
 	username = request.session.get('user','')
 	search_name = request.GET.get('name','')
@@ -63,7 +63,7 @@ def search_name(request):
 	return render(request, 'event_manage.html',{'user':username,'events':event_list})
 
 # 嘉宾管理
-@login_required
+#@login_required
 def guest_manage(request):
 	#username = request.COOKIES.get('user','') #读取浏览器cookie
 	guest_list = Guest.objects.all()
@@ -80,7 +80,7 @@ def guest_manage(request):
 	return render(request, 'guest_manage.html',{'user':username,'guests':contacts})
 
 #签到页面
-@login_required
+#@login_required
 def sign_index(request,event_id):
 	event = get_object_or_404(Event,id=event_id)
 	total = Guest.objects.filter(event=event_id)
@@ -89,7 +89,7 @@ def sign_index(request,event_id):
 	return render(request, 'sign_index.html',{'event':event,'total':total.count(),'signed':signed.count()})
 
 #签到动作
-@login_required
+#@login_required
 def sign_index_action(request,event_id):
 	event = get_object_or_404(Event,id=event_id)
 	phone = request.POST.get('phone','')
@@ -113,7 +113,7 @@ def sign_index_action(request,event_id):
 		return render(request, 'sign_index.html',{'event':event,"hit":"sign in SUCCESS!",'guest':result,'total':total,'signed':signed})
 
 #退出登录
-@login_required
+#@login_required
 def logout(request):
 	auth.logout(request) #退出登录
 	response = HttpResponseRedirect('/index')

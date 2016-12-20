@@ -94,7 +94,7 @@ class GuestManageTest(TestCase):
 
 	def test_guest_manage_serch_success(self):
 		'''测试嘉宾搜索'''
-		response = self.c.post('/search_phone/',{'phone':'13712341235'})
+		response = self.c.post('/search_name/',{'name':'alena'})
 		self.assertEqual(response.status_code, 200)
 		self.assertIn(b'alen', response.content)
 		self.assertIn(b'13712341235', response.content)
@@ -107,5 +107,28 @@ class SignIndexActionTest(TestCase):
 		Guest.objects.create(event_id=1,realname='alena',phone='13712341235',email='alena@mail.com',sign=False)
 		Guest.objects.create(event_id=2,realname='una',phone='14100000001',email='una@mail.com',sign=True)
 
-	def test_sign_index_action_phone_null(self)；
-	'''手机号为空'''
+		self.c = Client()
+	def test_sign_index_action_phone_null(self):
+		'''手机号为空'''
+		response = self.c.post('/sign_index_action/1/',{'phone':''})
+		self.assertEqual(response.status_code, 200)
+		self.assertIn(b'phone error', response.content)
+
+	def test_sign_index_action_phone_or_event_id_error(self):
+		'''手机号或发布会id错误'''
+		response = self.c.post('/sign_index_action/2/',{'phone':'13712341235'})
+		self.assertEqual(response.status_code, 200)
+		self.assertIn(b'event id or phone error', response.content)
+
+	def test_sign_index_action_user_sige_has(self):
+		'''用户已签到'''
+		response = self.c.post('/sign_index_action/2/',{'phone':'14100000001'})
+		self.assertEqual(response.status_code, 200)
+		self.assertIn(b'user has sign in', response.content)
+	
+	def test_sign_index_action_sign_success(self):
+		'''签到成功'''
+		response = self.c.post('/sign_index_action/1/',{'phone':'13712341235'})		
+		self.assertEqual(response.status_code,200)
+		self.assertIn(b'sign in success!',response.content)		
+
