@@ -78,3 +78,34 @@ class EventManageTest(TestCase):
 		self.assertIn(b'xiaomi5', response.content)
 		self.assertIn(b'beijing', response.content)
 		
+class GuestManageTest(TestCase):
+	'''嘉宾管理'''
+	def setUp(self):
+		Event.objects.create(id=1,name='xiaomi5',limit=2000,status=True,address='beijing',start_time=datetime(2016,8,10,14,0,0))
+		Guest.objects.create(event_id=1,realname='alena',phone='13712341235',email='alena@mail.com',sign=False)
+		self.c=Client()
+
+	def test_event_manage_success(self):
+		'''测试嘉宾信息：alen'''
+		response = self.c.post('/guest_manage/')
+		self.assertEqual(response.status_code, 200)
+		self.assertIn(b'alen', response.content)
+		self.assertIn(b'13712341235', response.content)
+
+	def test_guest_manage_serch_success(self):
+		'''测试嘉宾搜索'''
+		response = self.c.post('/search_phone/',{'phone':'13712341235'})
+		self.assertEqual(response.status_code, 200)
+		self.assertIn(b'alen', response.content)
+		self.assertIn(b'13712341235', response.content)
+
+class SignIndexActionTest(TestCase):
+	'''发布会签到'''
+	def setUp(self):
+		Event.objects.create(id=1,name='xiaomi5',limit=2000,status=True,address='beijing',start_time=datetime(2016,8,10,14,0,0))
+		Event.objects.create(id=2,name='oneplus4',limit=2000,status=True,address='shenzhen',start_time=datetime(2016,5,6,14,0,0))
+		Guest.objects.create(event_id=1,realname='alena',phone='13712341235',email='alena@mail.com',sign=False)
+		Guest.objects.create(event_id=2,realname='una',phone='14100000001',email='una@mail.com',sign=True)
+
+	def test_sign_index_action_phone_null(self)；
+	'''手机号为空'''
