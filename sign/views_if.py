@@ -21,7 +21,7 @@ def add_event(request):
 	if result:
 		return JsonResponse({'status':10022,'message':'event id already exists'})
 
-	result.Event.objects.filter(name = name)
+	result = Event.objects.filter(name = name)
 	if result:
 		return JsonResponse({'status':10023,'message':'event name already exists'})
  
