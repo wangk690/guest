@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generated="20170103 18:30:27.780" generator="Robot 3.0 (Python 3.4.3 on win32)">
-<suite source="E:\guest\rf_test\test.robot" id="s1" name="Test">
-<test id="s1-t1" name="testcase">
+<robot generator="Robot 3.0 (Python 3.4.3 on win32)" generated="20170105 16:07:48.709">
+<suite name="Test" source="E:\guest\rf_test\test.robot" id="s1">
+<test name="testcase" id="s1-t1">
 <kw name="Log" library="BuiltIn">
 <doc>Logs the given message with the given level.</doc>
 <arguments>
 <arg>robot framework</arg>
 </arguments>
-<msg level="INFO" timestamp="20170103 18:30:27.808">robot framework</msg>
-<status endtime="20170103 18:30:27.808" status="PASS" starttime="20170103 18:30:27.808"></status>
+<msg level="INFO" timestamp="20170105 16:07:48.868">robot framework</msg>
+<status endtime="20170105 16:07:48.868" status="PASS" starttime="20170105 16:07:48.868"></status>
 </kw>
-<status critical="yes" endtime="20170103 18:30:27.808" status="PASS" starttime="20170103 18:30:27.808"></status>
+<status endtime="20170105 16:07:48.869" critical="yes" status="PASS" starttime="20170105 16:07:48.868"></status>
 </test>
-<status endtime="20170103 18:30:27.809" status="PASS" starttime="20170103 18:30:27.782"></status>
+<status endtime="20170105 16:07:48.869" status="PASS" starttime="20170105 16:07:48.713"></status>
 </suite>
 <statistics>
 <total>
