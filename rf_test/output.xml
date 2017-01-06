@@ -1,28 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 3.0 (Python 3.4.3 on win32)" generated="20170105 16:07:48.709">
-<suite name="Test" source="E:\guest\rf_test\test.robot" id="s1">
-<test name="testcase" id="s1-t1">
-<kw name="Log" library="BuiltIn">
-<doc>Logs the given message with the given level.</doc>
+<robot generator="Robot 3.0 (Python 3.4.3 on win32)" generated="20170106 13:23:25.880">
+<suite name="Test If" source="E:\guest\rf_test\test_if.robot" id="s1">
+<test name="testget" id="s1-t1">
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
 <arguments>
-<arg>robot framework</arg>
+<arg>eid=1</arg>
 </arguments>
-<msg level="INFO" timestamp="20170105 16:07:48.868">robot framework</msg>
-<status endtime="20170105 16:07:48.868" status="PASS" starttime="20170105 16:07:48.868"></status>
+<assign>
+<var>${payload}</var>
+</assign>
+<msg level="INFO" timestamp="20170106 13:23:25.973">${payload} = {'eid': '1'}</msg>
+<status endtime="20170106 13:23:25.973" starttime="20170106 13:23:25.972" status="PASS"></status>
 </kw>
-<status endtime="20170105 16:07:48.869" critical="yes" status="PASS" starttime="20170105 16:07:48.868"></status>
+<kw name="Create Session" library="RequestsLibrary">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>event</arg>
+<arg>http://127.0.0.1:8000/api</arg>
+</arguments>
+<msg level="INFO" timestamp="20170106 13:23:25.973">Creating Session using : alias=event, url=http://127.0.0.1:8000/api, headers={},                     cookies=None, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status endtime="20170106 13:23:25.974" starttime="20170106 13:23:25.973" status="PASS"></status>
+</kw>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>event</arg>
+<arg>/gget_event_list/</arg>
+<arg>params=${payload}</arg>
+</arguments>
+<assign>
+<var>${r}</var>
+</assign>
+<msg level="INFO" timestamp="20170106 13:23:25.979">Starting new HTTP connection (1): 127.0.0.1</msg>
+<msg level="INFO" timestamp="20170106 13:23:25.985">Get Request using : alias=event, uri=/gget_event_list/, headers=None </msg>
+<msg level="INFO" timestamp="20170106 13:23:25.986">${r} = &lt;Response [404]&gt;</msg>
+<status endtime="20170106 13:23:25.986" starttime="20170106 13:23:25.974" status="PASS"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${r.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg level="INFO" timestamp="20170106 13:23:25.986">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg level="FAIL" timestamp="20170106 13:23:25.986">404 != 200</msg>
+<status endtime="20170106 13:23:25.986" starttime="20170106 13:23:25.986" status="FAIL"></status>
+</kw>
+<status endtime="20170106 13:23:25.987" starttime="20170106 13:23:25.972" status="FAIL" critical="yes">404 != 200</status>
 </test>
-<status endtime="20170105 16:07:48.869" status="PASS" starttime="20170105 16:07:48.713"></status>
+<status endtime="20170106 13:23:25.987" starttime="20170106 13:23:25.882" status="FAIL"></status>
 </suite>
 <statistics>
 <total>
-<stat pass="1" fail="0">Critical Tests</stat>
-<stat pass="1" fail="0">All Tests</stat>
+<stat fail="1" pass="0">Critical Tests</stat>
+<stat fail="1" pass="0">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat name="Test" id="s1" pass="1" fail="0">Test</stat>
+<stat name="Test If" id="s1" fail="1" pass="0">Test If</stat>
 </suite>
 </statistics>
 <errors>
